@@ -5,6 +5,8 @@ var path = require('path');
 var globby = require('globby');
 var meow = require('meow');
 var updateNotifier = require('update-notifier');
+var asArray = require('as-array');
+var resolveFrom = require('resolve-from');
 
 var cli = meow({
 	help: [
@@ -83,5 +85,9 @@ if (cli.flags.init) {
 	require('ava-init')().catch(error);
 	return;
 }
+
+asArray(cli.flags.require).forEach(function (moduleName) {
+	require(resolveFrom('.', moduleName));
+});
 
 init(cli.input);
